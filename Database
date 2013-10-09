@@ -1,0 +1,269 @@
+CREATE DATABASE MAILDATA
+USE MAILDATA
+
+
+
+go
+CREATE TABLE tblAdmin
+(
+  _stt int identity,
+  _useName nvarchar(100) primary key,
+  _passWord nvarchar(100),
+  _firstName nvarchar (200),
+  _lastName nvarchar (200),
+  _phone nvarchar(100),
+)
+go
+go
+INSERT INTO tblAdmin VALUES('admin','1234','Nguyen Huu','Lam','09123456')
+go
+----------------
+go
+CREATE TABLE tblAboutUs
+(
+  _stt int identity,
+  _aboutUsID nvarchar(100) primary key,
+  _title nvarchar(300),
+  _img nvarchar(100),
+  _detail text,
+  _datePost date,
+  _status int,
+)
+go
+go
+
+go
+------------------
+go
+CREATE TABLE tblEvent
+(
+  _stt int identity,
+  _eventID nvarchar(100) primary key,
+  _title nvarchar(300),
+  _img1 nvarchar(100),
+  _img2 nvarchar(100),
+  _detail text,
+  _day date,
+  _time time,
+  _status int,
+)
+go
+go
+
+go
+------------------
+go
+CREATE TABLE tblHoliday
+(
+  _stt int identity primary key,
+  _hlName nvarchar(100),
+  _detail text,
+  _day date,
+  _status int,
+)
+go
+go
+
+go
+-----------------------------
+go
+CREATE TABLE tblStaff
+(
+  _stt int identity,
+  _staffID nvarchar(100) primary key,
+  _emailName nvarchar(200),
+  _passWord nvarchar(200),
+  _firstName nvarchar(100),
+  _lastName nvarchar(100),
+  _qualification nvarchar(200),
+  _address nvarchar(300),
+  _phone nvarchar(100),
+  _birthDay date,
+  _gender nvarchar(100),
+  _status int,
+)
+go
+go
+
+go
+-----------------------------
+go
+CREATE TABLE tblStudent
+(
+  _stt int identity,
+  _studentID nvarchar(100) primary key,
+  _emailName nvarchar(200),
+  _passWord nvarchar(200),
+  _firstName nvarchar(100),
+  _lastName nvarchar(100),
+  _address nvarchar(300),
+  _phone nvarchar(100),
+  _birthDay date,
+  _gender nvarchar(100),
+  _status int,
+)
+go
+go
+
+go
+------------------------
+go
+CREATE TABLE tblClass
+(
+   _stt int identity,
+   _classID nvarchar(100) primary key,
+   _className nvarchar(200),
+   _staffID nvarchar(100),
+   _status int,
+   Constraint tblClass_tblStaff Foreign key (_staffID) References tblStaff(_staffID)
+)
+go
+go
+
+go
+------------------
+go
+CREATE TABLE tblClassDetail
+(
+ _stt int identity,
+ _classID nvarchar(100),
+ _studentID nvarchar(100),
+ _status int,
+ Constraint tblClassDetail_tblClass Foreign key (_classID) References tblClass(_classID),
+ Constraint tblClassDetail_tblStudent Foreign key (_studentID) References tblStudent(_studentID)
+)
+go
+go
+
+go
+-------------------
+go
+CREATE TABLE tblDiscipline
+(
+  _stt int identity,
+  _disciplineID nvarchar(100) primary key,
+  _disciplineName nvarchar(100),
+  _status int,
+)
+go
+go
+
+go
+----------------------
+go
+CREATE TABLE tblAssignment
+(
+  _stt int identity,
+  _assignmentID nvarchar(100) primary key,
+  _assignmentName nvarchar(200),
+  _disciplineID nvarchar(100),
+  _startDate datetime,
+  _endDate datetime,
+  _status int,
+  Constraint tblAssignment_tblDiscipline Foreign key (_disciplineID) References tblDiscipline(_disciplineID)
+)
+go
+go
+
+go
+----------------
+go
+CREATE TABLE tblMark
+(
+  _stt int identity primary key,
+  _disciplineID nvarchar(100),
+  _assignmentID nvarchar(100),
+  _studentID nvarchar(100),
+  _mark float,
+  Constraint tblMark_tblDiscipline Foreign key (_disciplineID) References tblDiscipline(_disciplineID),
+  Constraint tblMark_tblAssignment Foreign key (_assignmentID) References tblAssignment(_assignmentID),
+  Constraint tblMark_tblStudent Foreign key (_studentID) References tblStudent(_studentID)
+)
+go
+go
+
+go
+----------------------------------------------
+go
+CREATE TABLE tblSubmitOfAssignment
+(
+  _stt int identity primary key,
+  _assignmentID nvarchar(100),
+  _studentID nvarchar(100),
+  _postDay datetime,
+  _status int,
+  Constraint tblSubmitOfAssignment_tblAssignment Foreign key (_assignmentID) References tblAssignment(_assignmentID),
+  Constraint tblSubmitOfAssignment_tblStudent Foreign key (_studentID) References tblStudent(_studentID)
+)
+go
+go
+
+go
+----------------------------------------------
+go
+CREATE TABLE tblMailStaff
+(
+  _stt int identity,
+  _emailStaffID nvarchar(100) primary key ,
+  _staffID nvarchar(100),
+  _accountSend nvarchar(200),
+  _accountReceiver nvarchar(200),
+  _title nvarchar(100),
+  _content text,
+  _time datetime,
+  _status int,
+  Constraint tblMailStaff_tblStaff Foreign key (_staffID) References tblStaff(_staffID),
+)
+go
+go
+
+go
+---------------------------------------------------
+go
+CREATE TABLE tblMailStudent
+(
+  _stt int identity,
+  _emailStudentID nvarchar(100) primary key ,
+  _studentID nvarchar(100),
+  _accountSend nvarchar(200),
+  _accountReceiver nvarchar(200),
+  _title nvarchar(100),
+  _content text,
+  _time datetime,
+  _status int,
+  Constraint tblMailStudent_tblStudent Foreign key (_studentID) References tblStudent(_studentID),
+)
+go
+go
+
+go
+-------------------------------------------------
+go
+CREATE TABLE tblAttachmentStaff
+(
+ _stt int identity,
+ _ahsID nvarchar(100) primary key,
+ _fileName nvarchar(200),
+ _emailStaffID nvarchar(100),
+ _status int,
+ Constraint tblAttachmentStaff_tblMailStaff Foreign key (_emailStaffID) References tblMailStaff(_emailStaffID),
+)
+go
+go
+
+go
+---------------------------------------------
+go
+CREATE TABLE tblAttachmentStudent
+(
+ _stt int identity,
+ _ahsID nvarchar(100) primary key,
+ _fileName nvarchar(200),
+ _emailStudentID nvarchar(100),
+ _status int,
+ Constraint tblAttachmentStudent_tblMailStudent Foreign key (_emailStudentID) References tblMailStudent(_emailStudentID),
+)
+go
+go
+
+go
