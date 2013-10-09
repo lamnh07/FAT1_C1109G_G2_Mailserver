@@ -126,7 +126,7 @@ go
 CREATE TABLE tblClassDetail
 (
  _stt int identity,
- _classID nvarchar(100),
+ _classID nvarchar(100) primary key,
  _studentID nvarchar(100),
  _status int,
  Constraint tblClassDetail_tblClass Foreign key (_classID) References tblClass(_classID),
